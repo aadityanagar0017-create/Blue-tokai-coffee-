@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Tokai Coffee — Share Your Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --espresso-950: #1a100a;
+      --espresso-900: #261810;
+      --espresso-800: #382418;
+      --espresso-700: #4f3424;
+      --coffee-muted: #785d4b;
+      --coffee-soft: #9d826e;
+      --beige-warm: #dfd1c0;
+      --beige-light: #ede3d6;
+      --cream: #f7f2eb;
+      --off-white: #fcfaf7;
+      --gold-star: #d4962a;
+      --gold-star-glow: rgba(212, 150, 42, 0.25);
+      --success-bg: #eef5ee;
+      --success-text: #27582e;
+      --success-border: #b8d6bc;
+      --error-bg: #fdf1ef;
+      --error-text: #8c2d23;
+      --error-border: #ecc1bc;
+      --radius-card: 22px;
+      --radius-pill: 999px;
+      --radius-input: 14px;
+      --shadow-card: 0 20px 50px rgba(26, 16, 10, 0.22), 0 4px 14px rgba(26, 16, 10, 0.1);
+      --shadow-soft: 0 6px 18px rgba(38, 24, 16, 0.08);
+      --transition: 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--espresso-900);
+      background-color: var(--espresso-950);
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Full-page coffee background with subtle dark espresso overlay */
+    .bg-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-color: #21140d;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(110, 74, 48, 0.28), transparent 55%),
+        url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=1920&q=80');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      transform: scale(1.02);
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        180deg,
+        rgba(24, 14, 9, 0.78) 0%,
+        rgba(34, 21, 14, 0.72) 45%,
+        rgba(22, 13, 8, 0.86) 100%
+      );
+      backdrop-filter: blur(2.5px);
+      -webkit-backdrop-filter: blur(2.5px);
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px 16px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header Section */
+    .site-header {
+      text-align: center;
+      padding: 14px 12px 6px;
+      color: var(--off-white);
+      animation: fadeDown 0.6s ease-out both;
+    }
+
+    .brand-emblem {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: rgba(247, 242, 235, 0.12);
+      border: 1px solid rgba(223, 209, 192, 0.3);
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    }
+
+    .brand-emblem svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--beige-warm);
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .brand-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2rem, 5.2vw, 2.85rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--off-white);
+      line-height: 1.12;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+    }
+
+    .brand-subtitle {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(1.08rem, 2.8vw, 1.3rem);
+      color: var(--beige-warm);
+      margin-top: 6px;
+      letter-spacing: 0.02em;
+      opacity: 0.94;
+    }
+
+    /* Main Card */
+    .card {
+      background: rgba(252, 250, 247, 0.96);
+      border: 1px solid rgba(223, 209, 192, 0.65);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 28px 26px;
+      animation: fadeUp 0.65s ease-out both;
+    }
+
+    .section-block + .section-block {
+      margin-top: 26px;
+      padding-top: 26px;
+      border-top: 1px solid rgba(157, 130, 110, 0.2);
+    }
+
+    .section-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--espresso-900);
+      line-height: 1.2;
+    }
+
+    .section-hint {
+      font-size: 0.85rem;
+      color: var(--coffee-muted);
+    }
+
+    /* Star Rating Section */
+    .rating-wrapper {
+      text-align: center;
+      padding: 8px 0 4px;
+    }
+
+    .stars-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 6px 0 10px;
+    }
+
+    .star-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      font-size: clamp(2.1rem, 7vw, 2.75rem);
+      line-height: 1;
+      color: #d6c9ba;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.18s ease, text-shadow 0.2s ease;
+      user-select: none;
+    }
+
+    .star-btn:hover,
+    .star-btn:focus-visible {
+      outline: none;
+      transform: scale(1.14);
+    }
+
+    .star-btn.is-hovered {
+      color: #e4b154;
+    }
+
+    .star-btn.is-selected {
+      color: var(--gold-star);
+      text-shadow: 0 4px 14px var(--gold-star-glow);
+      animation: starPop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .rating-status {
+      min-height: 24px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--espresso-700);
+      transition: opacity 0.2s ease;
+    }
+
+    .rating-status.is-empty {
+      color: var(--coffee-soft);
+      font-weight: 500;
+    }
+
+    /* Keywords Section */
+    .keywords-lock-notice {
+      background: var(--cream);
+      border: 1px dashed rgba(120, 93, 75, 0.35);
+      border-radius: var(--radius-input);
+      padding: 18px 16px;
+      text-align: center;
+      color: var(--coffee-muted);
+      font-size: 0.92rem;
+    }
+
+    .keywords-container {
+      display: none;
+      animation: fadeIn 0.35s ease both;
+    }
+
+    .keywords-container.is-visible {
+      display: block;
+    }
+
+    .keywords-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 10px;
+    }
+
+    .keyword-btn {
+      appearance: none;
+      border: 1px solid rgba(120, 93, 75, 0.28);
+      background: var(--cream);
+      color: var(--espresso-800);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 15px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: background-color var(--transition), color var(--transition), border-color var(--transition), transform 0.16s ease, box-shadow var(--transition);
+      user-select: none;
+    }
+
+    .keyword-btn:hover {
+      background: var(--beige-light);
+      border-color: var(--espresso-700);
+      transform: translateY(-1px);
+    }
+
+    .keyword-btn:active {
+      transform: scale(0.97);
+    }
+
+    .keyword-btn:focus-visible {
+      outline: 2px solid var(--espresso-700);
+      outline-offset: 2px;
+    }
+
+    .keyword-btn.is-active {
+      background: var(--espresso-800);
+      color: var(--off-white);
+      border-color: var(--espresso-800);
+      box-shadow: 0 5px 14px rgba(56, 36, 24, 0.22);
+    }
+
+    .selected-count-badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--espresso-700);
+      background: var(--beige-light);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* Optional Inputs */
+    .inputs-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--espresso-800);
+      margin-bottom: 6px;
+    }
+
+    .optional-tag {
+      font-weight: 400;
+      color: var(--coffee-soft);
+      font-size: 0.82rem;
+      margin-left: 4px;
+    }
+
+    .text-input,
+    .text-area {
+      width: 100%;
+      font-family: inherit;
+      font-size: 0.94rem;
+      color: var(--espresso-900);
+      background: var(--off-white);
+      border: 1px solid rgba(120, 93, 75, 0.28);
+      border-radius: var(--radius-input);
+      padding: 12px 14px;
+      transition: border-color var(--transition), box-shadow var(--transition), background-color var(--transition);
+    }
+
+    .text-area {
+      resize: vertical;
+      min-height: 82px;
+      line-height: 1.5;
+    }
+
+    .text-input::placeholder,
+    .text-area::placeholder {
+      color: #a58f7e;
+    }
+
+    .text-input:focus,
+    .text-area:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: var(--espresso-700);
+      box-shadow: 0 0 0 3px rgba(79, 52, 36, 0.12);
+    }
+
+    /* Generator CTA Block */
+    .generator-cta-box {
+      background: linear-gradient(145deg, var(--cream) 0%, #f1e8dc 100%);
+      border: 1px solid rgba(157, 130, 110, 0.25);
+      border-radius: 18px;
+      padding: 22px 20px;
+      text-align: center;
+    }
+
+    .generator-cta-box h2 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--espresso-900);
+    }
+
+    .generator-cta-box p {
+      font-size: 0.92rem;
+      color: var(--coffee-muted);
+      max-width: 490px;
+      margin: 6px auto 18px;
+    }
+
+    .actions-inline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Buttons */
+    .btn {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.94rem;
+      letter-spacing: 0.03em;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 24px;
+      transition: transform 0.18s ease, box-shadow var(--transition), background-color var(--transition), color var(--transition), opacity 0.2s ease;
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--espresso-800);
+      outline-offset: 2px;
+    }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--espresso-800) 0%, var(--espresso-950) 100%);
+      color: var(--off-white);
+      box-shadow: 0 10px 24px rgba(38, 24, 16, 0.24);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(38, 24, 16, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--off-white);
+      color: var(--espresso-800);
+      border: 1px solid rgba(120, 93, 75, 0.34);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--beige-light);
+      border-color: var(--espresso-700);
+    }
+
+    .btn-accent {
+      background: linear-gradient(135deg, #c68621 0%, #a96d14 100%);
+      color: #ffffff;
+      box-shadow: 0 10px 22px rgba(169, 109, 20, 0.28);
+    }
+
+    .btn-accent:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(169, 109, 20, 0.36);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--coffee-muted);
+      padding: 10px 16px;
+      font-size: 0.86rem;
+    }
+
+    .btn-ghost:hover {
+      color: var(--espresso-900);
+      background: rgba(120, 93, 75, 0.1);
+    }
+
+    /* Inline Alerts & Loading */
+    .inline-alert {
+      margin-top: 14px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      display: none;
+      animation: fadeIn 0.25s ease both;
+    }
+
+    .inline-alert.is-visible {
+      display: block;
+    }
+
+    .inline-alert.error {
+      background: var(--error-bg);
+      color: var(--error-text);
+      border: 1px solid var(--error-border);
+    }
+
+    .inline-alert.success {
+      background: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid var(--success-border);
+    }
+
+    .loader-row {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 14px;
+      color: var(--espresso-700);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .loader-row.is-visible {
+      display: flex;
+    }
+
+    .coffee-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(79, 52, 36, 0.2);
+      border-top-color: var(--espresso-800);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* Review Preview Card */
+    .preview-card {
+      display: none;
+      animation: fadeUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .preview-card.is-visible {
+      display: block;
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .preview-stars {
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      color: var(--gold-star);
+    }
+
+    .quote-shell {
+      position: relative;
+      background: var(--cream);
+      border: 1px solid rgba(157, 130, 110, 0.32);
+      border-radius: 18px;
+      padding: 22px 20px 18px 20px;
+    }
+
+    .quote-mark {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 4rem;
+      line-height: 0.7;
+      color: rgba(120, 93, 75, 0.24);
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .review-editor {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 122px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 1.02rem;
+      line-height: 1.65;
+      color: var(--espresso-900);
+      resize: vertical;
+      padding: 6px 6px 6px 22px;
+    }
+
+    .review-editor:focus {
+      outline: none;
+    }
+
+    .editor-hint {
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--coffee-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .preview-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .preview-secondary-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(157, 130, 110, 0.18);
+    }
+
+    /* Footer */
+    .site-footer {
+      text-align: center;
+      color: rgba(247, 242, 235, 0.82);
+      font-size: 0.88rem;
+      padding: 10px 12px 6px;
+    }
+
+    .footer-credit {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: rgba(223, 209, 192, 0.68);
+      letter-spacing: 0.03em;
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.26); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .page-wrapper {
+        padding: 18px 12px 32px;
+        gap: 16px;
+      }
+
+      .card {
+        padding: 22px 16px;
+        border-radius: 18px;
+      }
+
+      .generator-cta-box {
+        padding: 18px 14px;
+      }
+
+      .preview-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .btn-ghost {
+        width: auto;
+      }
+
+      .preview-secondary-actions {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-backdrop" aria-hidden="true"></div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="page-wrapper">
+    <!-- 2. HEADER SECTION -->
+    <header class="site-header">
+      <div class="brand-emblem" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M17 8h1a4 4 0 0 1 0 8h-1" />
+          <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z" />
+          <path d="M6 2v3" />
+          <path d="M10 2v3" />
+          <path d="M14 2v3" />
+        </svg>
+      </div>
+      <h1 class="brand-title">BLUE TOKAI COFFEE</h1>
+      <p class="brand-subtitle">“Your coffee experience matters.”</p>
+    </header>
+
+    <!-- MAIN EXPERIENCE BUILDER CARD -->
+    <section class="card" aria-label="Review Builder">
+      <!-- 3. STAR RATING SECTION -->
+      <div class="section-block" id="ratingSection">
+        <div class="rating-wrapper">
+          <h2 class="section-title">How was your experience?</h2>
+          <div class="stars-row" role="radiogroup" aria-label="Star rating">
+            <button type="button" class="star-btn" data-star="1" role="radio" aria-checked="false" aria-label="1 star">★</button>
+            <button type="button" class="star-btn" data-star="2" role="radio" aria-checked="false" aria-label="2 stars">★</button>
+            <button type="button" class="star-btn" data-star="3" role="radio" aria-checked="false" aria-label="3 stars">★</button>
+            <button type="button" class="star-btn" data-star="4" role="radio" aria-checked="false" aria-label="4 stars">★</button>
+            <button type="button" class="star-btn" data-star="5" role="radio" aria-checked="false" aria-label="5 stars">★</button>
+          </div>
+          <p class="rating-status is-empty" id="ratingStatus" aria-live="polite">
+            Tap a star to select your rating
+          </p>
+        </div>
+      </div>
+
+      <!-- 4. RATING-SPECIFIC KEYWORDS SECTION -->
+      <div class="section-block">
+        <div class="section-label-row">
+          <div>
+            <h2 class="section-title">What stood out?</h2>
+            <p class="section-hint">Select any keywords that honestly match your visit.</p>
+          </div>
+          <span class="selected-count-badge" id="selectedCountBadge" style="display: none;">0 selected</span>
+        </div>
+
+        <div class="keywords-lock-notice" id="keywordsLockNotice">
+          Please select a star rating above first to see relevant keywords.
+        </div>
+
+        <div class="keywords-container" id="keywordsContainer">
+          <div class="keywords-grid" id="keywordsGrid" role="group" aria-label="Experience keywords"></div>
+        </div>
+      </div>
+
+      <!-- 5. OPTIONAL PERSONAL DETAILS -->
+      <div class="section-block">
+        <div class="section-label-row">
+          <h2 class="section-title">Personal Details</h2>
+          <span class="section-hint">Optional</span>
+        </div>
+
+        <div class="inputs-grid">
+          <div class="field-group">
+            <label for="orderInput">What did you order? <span class="optional-tag">(optional)</span></label>
+            <input
+              type="text"
+              id="orderInput"
+              class="text-input"
+              maxlength="140"
+              placeholder="e.g., Cappuccino, Cold Coffee, Croissant…"
+            />
+          </div>
+
+          <div class="field-group">
+            <label for="notesInput">Anything else you would like to mention? <span class="optional-tag">(optional)</span></label>
+            <textarea
+              id="notesInput"
+              class="text-area"
+              maxlength="320"
+              placeholder="Share a few details about your experience…"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. AI REVIEW GENERATOR CTA -->
+      <div class="section-block">
+        <div class="generator-cta-box">
+          <h2>Your Experience, Your Words</h2>
+          <p>“Choose what describes your visit and create a review that sounds natural and personal.”</p>
+
+          <div class="actions-inline">
+            <button type="button" class="btn btn-primary" id="generateBtn">
+              ☕ GENERATE MY REVIEW
+            </button>
+            <button type="button" class="btn btn-ghost" id="resetBtn" title="Clear all selections">
+              ↺ Reset
+            </button>
+          </div>
+
+          <div class="loader-row" id="loaderRow" aria-live="polite">
+            <span class="coffee-spinner" aria-hidden="true"></span>
+            <span>Brewing a fresh, natural draft…</span>
+          </div>
+
+          <div class="inline-alert error" id="formAlert" role="alert"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. REVIEW PREVIEW CARD -->
+    <section class="card preview-card" id="previewCard" aria-label="Your Google Review Draft" aria-live="polite">
+      <div class="preview-header">
+        <h2 class="section-title">Your Google Review Draft</h2>
+        <span class="preview-stars" id="previewStars" aria-label="Selected star rating"></span>
+      </div>
+
+      <div class="quote-shell">
+        <span class="quote-mark" aria-hidden="true">“</span>
+        <textarea
+          id="reviewOutput"
+          class="review-editor"
+          aria-label="Editable review draft"
+        ></textarea>
+      </div>
+
+      <div class="editor-hint">
+        <span>You can edit any word above to make it truly yours.</span>
+        <span id="charCountLabel">0 characters</span>
+      </div>
+
+      <div class="inline-alert success" id="copySuccessAlert" role="status">
+        Your review has been copied! Now paste it into Google Reviews.
+      </div>
+      <div class="inline-alert error" id="previewAlert" role="alert"></div>
+
+      <!-- 9 & 10. COPY & GOOGLE REVIEW BUTTONS -->
+      <div class="preview-actions">
+        <button type="button" class="btn btn-secondary" id="copyBtn">
+          📋 COPY MY REVIEW
+        </button>
+        <a
+          href="https://search.google.com/local/writereview?placeid=ChIJjTfRdNbBDDkR-K3Q3oOWj0M"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn btn-accent"
+          id="googleReviewBtn"
+        >
+          ⭐ WRITE A GOOGLE REVIEW
+        </a>
+      </div>
+
+      <div class="preview-secondary-actions">
+        <button type="button" class="btn btn-secondary" id="regenerateBtn">
+          ↻ GENERATE A NEW DRAFT
+        </button>
+        <button type="button" class="btn btn-ghost" id="resetBottomBtn">
+          Start Over
+        </button>
+      </div>
+    </section>
+
+    <!-- 12. FOOTER -->
+    <footer class="site-footer">
+      <p>Made with ☕ for coffee lovers.</p>
+      <p class="footer-credit">Made by Aaditya Nagar</p>
+    </footer>
+  </main>
+
+  <script>
+    /* ==========================================================================
+       CONFIGURATION — DIRECT GOOGLE REVIEW LINK
+       Blue Tokai Coffee — Shop No, Gr Flr, India Expo Plaza, DA/001,
+       Knowledge Park II, Greater Noida, Uttar Pradesh 201310, India
+       ========================================================================== */
+    const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=ChIJjTfRdNbBDDkR-K3Q3oOWj0M";
+
+    /* ==========================================================================
+       OPTIONAL AI BACKEND HOOK (OFF BY DEFAULT)
+       Never store private API keys inside publicly hosted HTML/JavaScript.
+       If you ever add a backend proxy endpoint, set USE_BACKEND_AI = true and
+       point AI_ENDPOINT to your secure server route.
+       ========================================================================== */
+    const USE_BACKEND_AI = false;
+    const AI_ENDPOINT = "";
+
+    /* ==========================================================================
+       RATING-SPECIFIC KEYWORDS (EXACT LISTS PER STAR RATING)
+       ========================================================================== */
+    const KEYWORDS_BY_RATING = {
+      5: [
+        "Amazing coffee",
+        "Excellent taste",
+        "Perfect cappuccino",
+        "Great ambience",
+        "Friendly staff",
+        "Excellent service",
+        "Cozy atmosphere",
+        "Beautiful café",
+        "Freshly brewed",
+        "Great presentation",
+        "Loved the experience",
+        "Peaceful place",
+        "Quality coffee",
+        "Perfect place to relax",
+        "Great food",
+        "Worth visiting",
+        "Helpful staff",
+        "Great location",
+        "Consistent quality",
+        "Will visit again"
+      ],
+      4: [
+        "Good coffee",
+        "Nice ambience",
+        "Friendly staff",
+        "Good service",
+        "Comfortable seating",
+        "Great cappuccino",
+        "Fresh coffee",
+        "Good experience",
+        "Clean café",
+        "Good food",
+        "Relaxing atmosphere",
+        "Nice presentation",
+        "Good location",
+        "Worth visiting",
+        "Pleasant experience",
+        "Quality drinks",
+        "Nice place to work",
+        "Overall enjoyable",
+        "Will come back"
+      ],
+      3: [
+        "Average coffee",
+        "Decent ambience",
+        "Okay service",
+        "Could be better",
+        "Average experience",
+        "Moderate pricing",
+        "Good location",
+        "Comfortable seating",
+        "Coffee was okay",
+        "Average food",
+        "Long waiting time",
+        "Limited menu",
+        "Nothing special",
+        "Reasonable quality",
+        "Mixed experience",
+        "Needs improvement",
+        "Could improve service",
+        "Overall decent"
+      ],
+      2: [
+        "Coffee was disappointing",
+        "Slow service",
+        "Long waiting time",
+        "Expensive",
+        "Uncomfortable seating",
+        "Poor ambience",
+        "Order delay",
+        "Food quality issue",
+        "Not worth the price",
+        "Staff could improve",
+        "Inconsistent taste",
+        "Limited options",
+        "Cleanliness concern",
+        "Disappointing experience",
+        "Room for improvement",
+        "Incorrect order"
+      ],
+      1: [
+        "Very disappointing",
+        "Poor service",
+        "Extremely slow",
+        "Incorrect order",
+        "Poor coffee quality",
+        "Unpleasant experience",
+        "Overpriced",
+        "Cleanliness issue",
+        "Unfriendly staff",
+        "Poor food quality",
+        "Long waiting time",
+        "Uncomfortable atmosphere",
+        "Not worth visiting",
+        "Service issue",
+        "Major disappointment",
+        "Needs serious improvement"
+      ]
+    };
+
+    const RATING_LABELS = {
+      1: "1 / 5 — Very disappointing",
+      2: "2 / 5 — Below expectations",
+      3: "3 / 5 — Okay / Mixed",
+      4: "4 / 5 — Good experience",
+      5: "5 / 5 — Loved it"
+    };
+
+    /* ==========================================================================
+       NATURAL PHRASE MAPPINGS FOR EVERY KEYWORD (NO ROBOTIC REPETITION)
+       ========================================================================== */
+    const KEYWORD_PHRASES = {
+      5: {
+        "Amazing coffee": [
+          "the coffee was genuinely great",
+          "really enjoyed the coffee here",
+          "the brew hit the spot right away"
+        ],
+        "Excellent taste": [
+          "the flavors were spot on",
+          "everything tasted fresh and well balanced",
+          "loved how good everything tasted"
+        ],
+        "Perfect cappuccino": [
+          "my cappuccino was made just right",
+          "the cappuccino had great foam and balance",
+          "really liked how they pulled the cappuccino"
+        ],
+        "Great ambience": [
+          "the place has a really nice vibe",
+          "loved the ambience inside",
+          "it feels inviting as soon as you walk in"
+        ],
+        "Friendly staff": [
+          "everyone behind the counter was warm and friendly",
+          "the staff made us feel welcome",
+          "friendly team working there"
+        ],
+        "Excellent service": [
+          "service was smooth and attentive",
+          "got our order quickly without any fuss",
+          "really good, attentive service"
+        ],
+        "Cozy atmosphere": [
+          "it has such a cozy setup",
+          "felt warm and cozy sitting inside",
+          "nice cozy vibe to settle into"
+        ],
+        "Beautiful café": [
+          "the café itself looks really nice",
+          "clean, thoughtfully put-together interior",
+          "such a good-looking space"
+        ],
+        "Freshly brewed": [
+          "you could tell the coffee was freshly brewed",
+          "came out fresh and aromatic",
+          "tasted fresh right from the first sip"
+        ],
+        "Great presentation": [
+          "everything arrived neatly presented",
+          "nice touch with how the drinks were served",
+          "looked great when it came to the table"
+        ],
+        "Loved the experience": [
+          "had a genuinely good time here",
+          "left really happy with the whole visit",
+          "just a really solid visit from start to finish"
+        ],
+        "Peaceful place": [
+          "surprisingly calm and peaceful inside",
+          "nice quiet atmosphere",
+          "a peaceful spot away from the noise outside"
+        ],
+        "Quality coffee": [
+          "you can taste the quality in the beans",
+          "solid quality coffee",
+          "consistently good quality brew"
+        ],
+        "Perfect place to relax": [
+          "easy place to sit back and unwind",
+          "great spot to take a break for an hour",
+          "felt very easy to relax here"
+        ],
+        "Great food": [
+          "the food was really good too",
+          "enjoyed the food alongside the coffee",
+          "food options were fresh and tasty"
+        ],
+        "Worth visiting": [
+          "definitely glad I stopped by",
+          "well worth dropping into",
+          "worth a stop if you are nearby"
+        ],
+        "Helpful staff": [
+          "staff was helpful when I wasn't sure what to pick",
+          "the team was happy to help with recommendations",
+          "really helpful folks at the counter"
+        ],
+        "Great location": [
+          "super convenient location to get to",
+          "easy spot to drop by",
+          "handy location too"
+        ],
+        "Consistent quality": [
+          "quality stays reliable every time I come",
+          "they keep things consistently good here",
+          "always reliable whenever I drop in"
+        ],
+        "Will visit again": [
+          "looking forward to coming back next time",
+          "I'll definitely drop by again",
+          "already planning to return soon"
+        ]
+      },
+      4: {
+        "Good coffee": [
+          "the coffee was good",
+          "enjoyed my cup of coffee",
+          "solid coffee overall"
+        ],
+        "Nice ambience": [
+          "nice vibe inside",
+          "liked the ambience",
+          "pleasant space to hang out in"
+        ],
+        "Friendly staff": [
+          "the staff was friendly",
+          "polite and welcoming folks at the counter",
+          "team was pleasant to deal with"
+        ],
+        "Good service": [
+          "service was smooth",
+          "orders came out in good time",
+          "good service throughout"
+        ],
+        "Comfortable seating": [
+          "seating was comfortable enough to stay a while",
+          "comfy tables and chairs",
+          "easy to find a comfortable seat"
+        ],
+        "Great cappuccino": [
+          "the cappuccino was really good",
+          "enjoyed the cappuccino",
+          "nice, well-made cappuccino"
+        ],
+        "Fresh coffee": [
+          "coffee tasted fresh",
+          "nice fresh brew",
+          "served hot and fresh"
+        ],
+        "Good experience": [
+          "had a good visit",
+          "left satisfied with the stop",
+          "good time overall"
+        ],
+        "Clean café": [
+          "noticed how clean and tidy they keep the place",
+          "the café was clean and well kept",
+          "nice clean space"
+        ],
+        "Good food": [
+          "the food was good too",
+          "enjoyed the food items we tried",
+          "nice bites to go with coffee"
+        ],
+        "Relaxing atmosphere": [
+          "felt pretty relaxed sitting there",
+          "easygoing, calm atmosphere",
+          "nice relaxing spot"
+        ],
+        "Nice presentation": [
+          "drinks were served nicely",
+          "neat presentation",
+          "everything came out looking good"
+        ],
+        "Good location": [
+          "convenient location",
+          "easy spot to reach",
+          "handy location to meet up"
+        ],
+        "Worth visiting": [
+          "worth stopping in",
+          "glad we dropped by",
+          "a good spot to check out"
+        ],
+        "Pleasant experience": [
+          "had a pleasant afternoon here",
+          "nice, easygoing visit",
+          "pleasant stop overall"
+        ],
+        "Quality drinks": [
+          "drinks were well prepared",
+          "good quality beverages",
+          "solid drink menu"
+        ],
+        "Nice place to work": [
+          "worked well for getting some laptop work done",
+          "good spot to sit and focus for a bit",
+          "comfortable setup if you want to work"
+        ],
+        "Overall enjoyable": [
+          "enjoyed the visit overall",
+          "all in all, a good coffee stop",
+          "pretty enjoyable time"
+        ],
+        "Will come back": [
+          "would happily come back",
+          "I'd drop by again",
+          "likely to visit again soon"
+        ]
+      },
+      3: {
+        "Average coffee": [
+          "the coffee was pretty average",
+          "coffee felt fairly ordinary",
+          "coffee was alright, though nothing memorable"
+        ],
+        "Decent ambience": [
+          "the space itself is decent",
+          "ambience was alright",
+          "nice enough setup inside"
+        ],
+        "Okay service": [
+          "service was just okay",
+          "staff got the job done, nothing more",
+          "service felt pretty standard"
+        ],
+        "Could be better": [
+          "a few things felt like they could be better",
+          "definitely room to do a bit better",
+          "could have been better overall"
+        ],
+        "Average experience": [
+          "pretty average visit overall",
+          "an okay stop, nothing standout",
+          "middle-of-the-road visit"
+        ],
+        "Moderate pricing": [
+          "prices felt fairly moderate",
+          "pricing seemed reasonable enough",
+          "mid-range prices for a café"
+        ],
+        "Good location": [
+          "location is convenient though",
+          "easy enough to get to",
+          "good spot location-wise"
+        ],
+        "Comfortable seating": [
+          "seating was comfortable enough",
+          "at least the seats were comfy",
+          "decent seating to sit for a bit"
+        ],
+        "Coffee was okay": [
+          "the coffee was okay",
+          "coffee was drinkable, just not a standout",
+          "brew was fine, though I've had better"
+        ],
+        "Average food": [
+          "the food was average",
+          "food was alright, nothing special",
+          "bites were okay"
+        ],
+        "Long waiting time": [
+          "had to wait a bit longer than expected",
+          "the wait dragged a little",
+          "took a while for the order to come out"
+        ],
+        "Limited menu": [
+          "the menu felt somewhat limited",
+          "wished there were a few more options to pick from",
+          "selection was on the smaller side"
+        ],
+        "Nothing special": [
+          "nothing really stood out to me",
+          "felt fairly standard overall",
+          "didn't leave a strong impression either way"
+        ],
+        "Reasonable quality": [
+          "quality was reasonable enough",
+          "passable quality for a quick stop",
+          "fair quality overall"
+        ],
+        "Mixed experience": [
+          "left with a bit of a mixed impression",
+          "some parts worked well while others didn't",
+          "a bit of a mixed visit"
+        ],
+        "Needs improvement": [
+          "there are a few areas that need improvement",
+          "things could use a bit of tightening up",
+          "needs improvement in a couple of spots"
+        ],
+        "Could improve service": [
+          "service could definitely be smoother",
+          "the service side could use more attention",
+          "staff could be a bit quicker and more attentive"
+        ],
+        "Overall decent": [
+          "overall it was decent enough",
+          "fine for a quick coffee stop",
+          "all things considered, it was okay"
+        ]
+      },
+      2: {
+        "Coffee was disappointing": [
+          "the coffee was disappointing",
+          "expected much better from the coffee",
+          "my drink didn't taste great"
+        ],
+        "Slow service": [
+          "service was noticeably slow",
+          "things moved very slowly behind the counter",
+          "service dragged quite a bit"
+        ],
+        "Long waiting time": [
+          "ended up waiting way too long",
+          "the wait time got frustrating",
+          "took much longer than it should have"
+        ],
+        "Expensive": [
+          "felt quite pricey for what I got",
+          "on the expensive side",
+          "prices felt steep given the quality"
+        ],
+        "Uncomfortable seating": [
+          "seating wasn't comfortable at all",
+          "the chairs and layout felt uncomfortable",
+          "hard to sit comfortably for long"
+        ],
+        "Poor ambience": [
+          "the ambience felt off",
+          "didn't enjoy the atmosphere inside",
+          "the vibe wasn't great"
+        ],
+        "Order delay": [
+          "there was a clear delay with my order",
+          "my order took way too long to arrive",
+          "getting the order out was delayed"
+        ],
+        "Food quality issue": [
+          "food quality wasn't up to the mark",
+          "had an issue with how the food tasted",
+          "the food didn't feel fresh"
+        ],
+        "Not worth the price": [
+          "didn't feel worth what I paid",
+          "hard to justify the price tag",
+          "value for money wasn't there"
+        ],
+        "Staff could improve": [
+          "staff could definitely be more attentive",
+          "the team seemed distracted and could improve",
+          "service attitude needs work"
+        ],
+        "Inconsistent taste": [
+          "the taste felt inconsistent",
+          "flavor was off compared to what I expected",
+          "quality felt hit or miss"
+        ],
+        "Limited options": [
+          "options were quite limited",
+          "not much to choose from on the menu",
+          "selection felt too restricted"
+        ],
+        "Cleanliness concern": [
+          "cleanliness could have been much better",
+          "tables didn't look properly wiped down",
+          "noticed a few cleanliness concerns around the seating"
+        ],
+        "Disappointing experience": [
+          "left feeling pretty disappointed",
+          "not the visit I was hoping for",
+          "overall it fell short"
+        ],
+        "Room for improvement": [
+          "there's plenty of room for improvement",
+          "a lot here needs work",
+          "hopefully they tighten things up"
+        ],
+        "Incorrect order": [
+          "my order wasn't made right",
+          "they got part of the order wrong",
+          "received an incorrect order"
+        ]
+      },
+      1: {
+        "Very disappointing": [
+          "it was a very disappointing visit",
+          "felt really let down by this stop",
+          "honestly fell far short of expectations"
+        ],
+        "Poor service": [
+          "service was poor",
+          "had a rough time with the service",
+          "service was lacking from start to finish"
+        ],
+        "Extremely slow": [
+          "everything moved extremely slowly",
+          "service was painfully slow",
+          "took forever just to get attended to"
+        ],
+        "Incorrect order": [
+          "they got my order wrong",
+          "my order came out completely wrong",
+          "the order wasn't right at all"
+        ],
+        "Poor coffee quality": [
+          "coffee quality was poor",
+          "the coffee didn't taste good at all",
+          "the brew was nowhere near acceptable"
+        ],
+        "Unpleasant experience": [
+          "it turned into an unpleasant visit",
+          "didn't have a good time at all",
+          "left with a bad impression"
+        ],
+        "Overpriced": [
+          "felt way overpriced for what was served",
+          "the prices felt completely unjustified",
+          "definitely overpriced"
+        ],
+        "Cleanliness issue": [
+          "cleanliness was a real problem",
+          "the place didn't feel clean",
+          "noticed obvious cleanliness issues"
+        ],
+        "Unfriendly staff": [
+          "the staff came across as unfriendly",
+          "nobody seemed welcoming at the counter",
+          "interaction with staff felt cold"
+        ],
+        "Poor food quality": [
+          "the food quality was poor",
+          "couldn't enjoy the food at all",
+          "food tasted stale and poorly made"
+        ],
+        "Long waiting time": [
+          "had to wait far too long",
+          "the waiting time was unreasonable",
+          "waited way longer than anyone should have to"
+        ],
+        "Uncomfortable atmosphere": [
+          "the atmosphere felt uncomfortable",
+          "didn't feel comfortable sitting there",
+          "the space felt awkward and unpleasant"
+        ],
+        "Not worth visiting": [
+          "hard to see a reason to visit right now",
+          "not worth the trip based on this visit",
+          "wouldn't recommend stopping by at the moment"
+        ],
+        "Service issue": [
+          "ran into clear service issues",
+          "orders weren't handled properly at all",
+          "there were real breakdowns in service"
+        ],
+        "Major disappointment": [
+          "a major disappointment overall",
+          "really let down by how things went",
+          "a big letdown"
+        ],
+        "Needs serious improvement": [
+          "needs serious improvement across the board",
+          "a lot needs to be fixed here",
+          "serious changes are needed"
+        ]
+      }
+    };
+
+    /* ==========================================================================
+       OPENINGS & CLOSINGS VARIATIONS PER RATING
+       ========================================================================== */
+    const OPENINGS = {
+      5: [
+        "Stopped by Blue Tokai Coffee earlier today.",
+        "Dropped into Blue Tokai Coffee for a quick break.",
+        "Visited Blue Tokai Coffee recently.",
+        "Spent some time at Blue Tokai Coffee this week.",
+        "Grabbed coffee at Blue Tokai Coffee earlier.",
+        "Made a stop at Blue Tokai Coffee today.",
+        "Swung by Blue Tokai Coffee for a coffee.",
+        "Checked out Blue Tokai Coffee recently.",
+        "Had a coffee break at Blue Tokai Coffee today.",
+        "Dropped by Blue Tokai Coffee when I was in the area."
+      ],
+      4: [
+        "Stopped by Blue Tokai Coffee recently.",
+        "Visited Blue Tokai Coffee earlier this week.",
+        "Dropped into Blue Tokai Coffee for a bit.",
+        "Grabbed a coffee at Blue Tokai Coffee today.",
+        "Spent an hour at Blue Tokai Coffee.",
+        "Checked out Blue Tokai Coffee while nearby.",
+        "Swung by Blue Tokai Coffee earlier.",
+        "Went to Blue Tokai Coffee for a catch-up."
+      ],
+      3: [
+        "Stopped by Blue Tokai Coffee earlier.",
+        "Visited Blue Tokai Coffee recently.",
+        "Dropped into Blue Tokai Coffee for a quick cup.",
+        "Tried Blue Tokai Coffee today.",
+        "Went to Blue Tokai Coffee this week.",
+        "Stopped in at Blue Tokai Coffee while passing through."
+      ],
+      2: [
+        "Stopped by Blue Tokai Coffee recently.",
+        "Visited Blue Tokai Coffee earlier today.",
+        "Dropped into Blue Tokai Coffee this week.",
+        "Tried Blue Tokai Coffee earlier.",
+        "Went to Blue Tokai Coffee expecting a decent cup."
+      ],
+      1: [
+        "Visited Blue Tokai Coffee recently.",
+        "Stopped by Blue Tokai Coffee earlier today.",
+        "Went to Blue Tokai Coffee this week.",
+        "Dropped into Blue Tokai Coffee earlier."
+      ]
+    };
+
+    const CLOSINGS = {
+      5: [
+        "Happy to stop in again next time I'm around.",
+        "Definitely a spot I'd go back to.",
+        "Glad I chose to stop here.",
+        "Easy place to recommend to friends nearby.",
+        "Left feeling refreshed."
+      ],
+      4: [
+        "Would happily stop by again.",
+        "A reliable spot to keep in mind.",
+        "All in all, a nice visit.",
+        "Glad I dropped in."
+      ],
+      3: [
+        "Might give it another shot on a quieter day.",
+        "Okay if you're already in the area.",
+        "Just felt pretty average this time.",
+        "Not bad, just room to tighten things up."
+      ],
+      2: [
+        "Hope they sort these things out soon.",
+        "Probably won't rush back unless things improve.",
+        "Expected a lot better based on the brand.",
+        "Just wasn't a good visit this time."
+      ],
+      1: [
+        "Won't be returning unless things change significantly.",
+        "Really hope management looks into this.",
+        "Left pretty frustrated with how it went.",
+        "Just not good enough."
+      ]
+    };
+
+    /* ==========================================================================
+       REVIEW HISTORY & UNIQUENESS ENGINE (localStorage, >= 100 entries)
+       ========================================================================== */
+    const HISTORY_STORAGE_KEY = "bt_coffee_review_history_v1";
+    const MAX_HISTORY_ITEMS = 140;
+
+    function loadReviewHistory() {
+      try {
+        const raw = localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveReviewToHistory(entry) {
+      try {
+        const history = loadReviewHistory();
+        history.push(entry);
+        const trimmed = history.slice(-MAX_HISTORY_ITEMS);
+        localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(trimmed));
+      } catch (e) {
+        // Ignore storage quota / private mode errors safely
+      }
+    }
+
+    function normalizeForCompare(str) {
+      return (str || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function getFirstWords(str, count = 4) {
+      return normalizeForCompare(str).split(" ").slice(0, count).join(" ");
+    }
+
+    function getLastWords(str, count = 4) {
+      const words = normalizeForCompare(str).split(" ");
+      return words.slice(Math.max(0, words.length - count)).join(" ");
+    }
+
+    function getNgrams(text, n = 2) {
+      const words = normalizeForCompare(text).split(" ").filter(Boolean);
+      const set = new Set();
+      if (words.length < n) {
+        if (words.length > 0) set.add(words.join(" "));
+        return set;
+      }
+      for (let i = 0; i <= words.length - n; i++) {
+        set.add(words.slice(i, i + n).join(" "));
+      }
+      return set;
+    }
+
+    function jaccardSimilarity(setA, setB) {
+      if (!setA.size || !setB.size) return 0;
+      let intersection = 0;
+      for (const item of setA) {
+        if (setB.has(item)) intersection++;
+      }
+      const union = setA.size + setB.size - intersection;
+      return union === 0 ? 0 : intersection / union;
+    }
+
+    /* ==========================================================================
+       TEXT UTILITIES & SMART ORDER / NOTE INTEGRATION
+       ========================================================================== */
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function capitalizeFirst(str) {
+      if (!str) return "";
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    function cleanSentence(str) {
+      return str
+        .replace(/\s+/g, " ")
+        .replace(/\s+([,.!?;:])/g, "$1")
+        .replace(/\.{2,}/g, ".")
+        .replace(/,\./g, ".")
+        .trim();
+    }
+
+    function formatOrderPhrase(rawOrder) {
+      const trimmed = (rawOrder || "").trim();
+      if (!trimmed) return "";
+
+      const parts = trimmed
+        .split(/\s*,\s*|\s+&\s+|\s+and\s+/i)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      if (parts.length === 0) return "";
+
+      const normalizedParts = parts.map(item => {
+        if (/^[A-Z0-9-]+$/.test(item) && item.length <= 5) return item;
+        return item.charAt(0).toLowerCase() + item.slice(1);
+      });
+
+      if (normalizedParts.length === 1) {
+        return normalizedParts[0];
+      }
+      if (normalizedParts.length === 2) {
+        return `${normalizedParts[0]} and ${normalizedParts[1]}`;
+      }
+      const last = normalizedParts.pop();
+      return `${normalizedParts.join(", ")}, and ${last}`;
+    }
+
+    function buildOrderSentence(orderText, rating) {
+      const items = formatOrderPhrase(orderText);
+      if (!items) return "";
+
+      const neutralTemplates = [
+        `I ordered ${items}.`,
+        `Picked up ${items} while I was there.`,
+        `Went with ${items} on this visit.`,
+        `Got ${items} for my order.`,
+        `Stopped in for ${items}.`,
+        `Had ${items} during my visit.`
+      ];
+
+      if (rating >= 4) {
+        neutralTemplates.push(
+          `Tried ${items} and really enjoyed it.`,
+          `Had ${items}, which hit the spot.`
+        );
+      } else if (rating <= 2) {
+        neutralTemplates.push(
+          `I had ordered ${items}.`,
+          `Ended up getting ${items}.`
+        );
+      }
+      return pickRandom(neutralTemplates);
+    }
+
+    function formatExtraNote(rawNote) {
+      let note = (rawNote || "").trim().replace(/\s+/g, " ");
+      if (!note) return "";
+      note = capitalizeFirst(note);
+      if (!/[.!?]$/.test(note)) {
+        note += ".";
+      }
+      return note;
+    }
+
+    /* ==========================================================================
+       NATURAL REVIEW GENERATOR (MULTIPLE STYLES, NO CLICHÉS, NO FABRICATION)
+       ========================================================================== */
+    function selectKeywordSubset(selectedKeywords) {
+      if (!selectedKeywords.length) return [];
+      const shuffled = shuffleArray(selectedKeywords);
+      if (shuffled.length <= 3) return shuffled;
+      const targetCount = Math.min(shuffled.length, Math.random() < 0.45 ? 3 : 4);
+      return shuffled.slice(0, targetCount);
+    }
+
+    function joinClausesNaturally(clauses, rating) {
+      if (!clauses.length) return "";
+      if (clauses.length === 1) {
+        return `${capitalizeFirst(clauses[0])}.`;
+      }
+      if (clauses.length === 2) {
+        const connectors = rating === 3
+          ? [", and ", ". On the flip side, ", ". Also, "]
+          : [", and ", ", plus ", ". Also, "];
+        const conn = pickRandom(connectors);
+        if (conn.startsWith(".")) {
+          return `${capitalizeFirst(clauses[0])}${conn}${clauses[1]}.`;
+        }
+        return `${capitalizeFirst(clauses[0])}${conn}${clauses[1]}.`;
+      }
+      if (clauses.length === 3) {
+        const mode = Math.floor(Math.random() * 3);
+        if (mode === 0) {
+          return `${capitalizeFirst(clauses[0])}, and ${clauses[1]}. ${capitalizeFirst(clauses[2])}.`;
+        }
+        if (mode === 1) {
+          return `${capitalizeFirst(clauses[0])}. ${capitalizeFirst(clauses[1])}, and ${clauses[2]}.`;
+        }
+        return `${capitalizeFirst(clauses[0])}; ${clauses[1]}, and ${clauses[2]}.`;
+      }
+      return `${capitalizeFirst(clauses[0])}, and ${clauses[1]}. ${capitalizeFirst(clauses[2])}, plus ${clauses[3]}.`;
+    }
+
+    function createCandidateDraft(rating, selectedKeywords, orderText, notesText) {
+      const stylePool = [
+        "conversational_standard",
+        "concise_direct",
+        "order_first",
+        "observation_led",
+        "relaxed_narrative"
+      ];
+      const styleId = pickRandom(stylePool);
+
+      const subset = selectKeywordSubset(selectedKeywords);
+      const phrasesMap = KEYWORD_PHRASES[rating] || {};
+      const clauses = subset.map(kw => {
+        const options = phrasesMap[kw];
+        return options ? pickRandom(options) : kw.toLowerCase();
+      });
+
+      const opening = pickRandom(OPENINGS[rating]);
+      const orderSentence = buildOrderSentence(orderText, rating);
+      const noteSentence = formatExtraNote(notesText);
+      const includeClosing = Math.random() < 0.62;
+      const closing = includeClosing ? pickRandom(CLOSINGS[rating]) : "";
+
+      const bodyFromKeywords = joinClausesNaturally(clauses, rating);
+
+      if (!clauses.length && !orderSentence && !noteSentence) {
+        const minimalRatingLines = {
+          5: [
+            "Stopped by Blue Tokai Coffee and had a really good visit.",
+            "Dropped into Blue Tokai Coffee recently and left very happy.",
+            "Had a great stop at Blue Tokai Coffee earlier today."
+          ],
+          4: [
+            "Stopped by Blue Tokai Coffee and had a good visit overall.",
+            "Dropped into Blue Tokai Coffee earlier and enjoyed the stop.",
+            "Had a pleasant coffee break at Blue Tokai Coffee."
+          ],
+          3: [
+            "Stopped by Blue Tokai Coffee recently and it was an okay visit.",
+            "Visited Blue Tokai Coffee earlier — pretty average overall.",
+            "Dropped into Blue Tokai Coffee for a bit; it was decent enough."
+          ],
+          2: [
+            "Stopped by Blue Tokai Coffee recently and left feeling disappointed.",
+            "Visited Blue Tokai Coffee earlier and it didn't quite meet expectations.",
+            "Dropped into Blue Tokai Coffee, though the visit fell short."
+          ],
+          1: [
+            "Stopped by Blue Tokai Coffee recently and had a very disappointing visit.",
+            "Visited Blue Tokai Coffee earlier and left quite unhappy with how things went.",
+            "Dropped into Blue Tokai Coffee and it was a letdown overall."
+          ]
+        };
+        const base = pickRandom(minimalRatingLines[rating]);
+        const text = cleanSentence(includeClosing && Math.random() < 0.5 ? `${base} ${closing}` : base);
+        return { text, styleId: "minimal_" + styleId };
+      }
+
+      let parts = [];
+
+      if (styleId === "concise_direct") {
+        if (orderSentence) parts.push(orderSentence);
+        if (bodyFromKeywords) parts.push(bodyFromKeywords);
+        if (noteSentence) parts.push(noteSentence);
+        if (!orderSentence && !noteSentence && closing) parts.push(closing);
+      } else if (styleId === "order_first") {
+        if (orderSentence) {
+          parts.push(orderSentence.replace(/\.$/, "") + " at Blue Tokai Coffee.");
+        } else {
+          parts.push(opening);
+        }
+        if (bodyFromKeywords) parts.push(bodyFromKeywords);
+        if (noteSentence) parts.push(noteSentence);
+        if (closing && Math.random() < 0.55) parts.push(closing);
+      } else if (styleId === "observation_led") {
+        if (bodyFromKeywords) {
+          parts.push(bodyFromKeywords);
+        } else {
+          parts.push(opening);
+        }
+        if (orderSentence) parts.push(orderSentence);
+        if (noteSentence) parts.push(noteSentence);
+        if (closing) parts.push(closing);
+      } else if (styleId === "relaxed_narrative") {
+        parts.push(opening);
+        if (orderSentence) parts.push(orderSentence);
+        if (noteSentence) parts.push(noteSentence);
+        if (bodyFromKeywords) parts.push(bodyFromKeywords);
+        if (closing && parts.length <= 3) parts.push(closing);
+      } else {
+        parts.push(opening);
+        if (bodyFromKeywords) parts.push(bodyFromKeywords);
+        if (orderSentence) parts.push(orderSentence);
+        if (noteSentence) parts.push(noteSentence);
+        if (closing && Math.random() < 0.6) parts.push(closing);
+      }
+
+      const finalText = cleanSentence(parts.filter(Boolean).join(" "));
+      return { text: finalText, styleId };
+    }
+
+    function generateUniqueReview(rating, selectedKeywords, orderText, notesText, currentDraftText = "") {
+      const history = loadReviewHistory();
+      const recent10 = history.slice(-10);
+      const recent5 = history.slice(-5);
+
+      const historyExactSet = new Set(history.map(item => normalizeForCompare(item.text)));
+      if (currentDraftText) {
+        historyExactSet.add(normalizeForCompare(currentDraftText));
+      }
+
+      const recentOpenings = new Set(recent10.map(item => item.opening));
+      const recentClosings = new Set(recent10.map(item => item.closing));
+      const recentStyles = new Set(recent5.map(item => item.styleId));
+
+      let bestCandidate = null;
+      let lowestPenalty = Infinity;
+
+      const MAX_ATTEMPTS = 24;
+
+      for (let i = 0; i < MAX_ATTEMPTS; i++) {
+        const candidate = createCandidateDraft(rating, selectedKeywords, orderText, notesText);
+        const normText = normalizeForCompare(candidate.text);
+
+        if (!normText || historyExactSet.has(normText)) {
+          continue;
+        }
+
+        const opening = getFirstWords(candidate.text, 4);
+        const closing = getLastWords(candidate.text, 4);
+        const bigrams = getNgrams(candidate.text, 2);
+
+        let maxSim = 0;
+        for (const prev of history.slice(-30)) {
+          const prevBigrams = getNgrams(prev.text, 2);
+          const sim = jaccardSimilarity(bigrams, prevBigrams);
+          if (sim > maxSim) maxSim = sim;
+        }
+        if (currentDraftText) {
+          const curSim = jaccardSimilarity(bigrams, getNgrams(currentDraftText, 2));
+          if (curSim > maxSim) maxSim = curSim;
+        }
+
+        let penalty = maxSim * 100;
+        if (recentOpenings.has(opening)) penalty += 35;
+        if (recentClosings.has(closing)) penalty += 25;
+        if (recentStyles.has(candidate.styleId)) penalty += 15;
+        if (maxSim > 0.65) penalty += 50;
+
+        if (penalty < lowestPenalty) {
+          lowestPenalty = penalty;
+          bestCandidate = candidate;
+        }
+
+        if (penalty < 28) {
+          break;
+        }
+      }
+
+      if (!bestCandidate) {
+        bestCandidate = createCandidateDraft(rating, selectedKeywords, orderText, notesText);
+      }
+
+      saveReviewToHistory({
+        text: bestCandidate.text,
+        opening: getFirstWords(bestCandidate.text, 4),
+        closing: getLastWords(bestCandidate.text, 4),
+        styleId: bestCandidate.styleId,
+        rating,
+        ts: Date.now()
+      });
+
+      return bestCandidate.text;
+    }
+
+    /* ==========================================================================
+       DOM STATE & INTERACTIVE CONTROLLERS
+       ========================================================================== */
+    const state = {
+      rating: 0,
+      selectedKeywords: new Set(),
+      isGenerating: false
+    };
+
+    const starButtons = Array.from(document.querySelectorAll(".star-btn"));
+    const ratingStatus = document.getElementById("ratingStatus");
+    const keywordsLockNotice = document.getElementById("keywordsLockNotice");
+    const keywordsContainer = document.getElementById("keywordsContainer");
+    const keywordsGrid = document.getElementById("keywordsGrid");
+    const selectedCountBadge = document.getElementById("selectedCountBadge");
+
+    const orderInput = document.getElementById("orderInput");
+    const notesInput = document.getElementById("notesInput");
+    const generateBtn = document.getElementById("generateBtn");
+    const regenerateBtn = document.getElementById("regenerateBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resetBottomBtn = document.getElementById("resetBottomBtn");
+    const loaderRow = document.getElementById("loaderRow");
+    const formAlert = document.getElementById("formAlert");
+
+    const previewCard = document.getElementById("previewCard");
+    const previewStars = document.getElementById("previewStars");
+    const reviewOutput = document.getElementById("reviewOutput");
+    const charCountLabel = document.getElementById("charCountLabel");
+    const copyBtn = document.getElementById("copyBtn");
+    const copySuccessAlert = document.getElementById("copySuccessAlert");
+    const previewAlert = document.getElementById("previewAlert");
+    const googleReviewBtn = document.getElementById("googleReviewBtn");
+
+    // Ensure the anchor href stays synced with the top-level GOOGLE_REVIEW_URL constant
+    if (GOOGLE_REVIEW_URL && GOOGLE_REVIEW_URL.startsWith("http")) {
+      googleReviewBtn.href = GOOGLE_REVIEW_URL;
+    }
+
+    function showAlert(el, msg) {
+      el.textContent = msg;
+      el.classList.add("is-visible");
+    }
+
+    function hideAlert(el) {
+      el.classList.remove("is-visible");
+    }
+
+    function updateStarVisuals(hoverValue = 0) {
+      starButtons.forEach(btn => {
+        const val = Number(btn.dataset.star);
+        btn.classList.toggle("is-selected", val <= state.rating);
+        btn.classList.toggle("is-hovered", hoverValue > 0 && val <= hoverValue && val > state.rating);
+        btn.setAttribute("aria-checked", String(val === state.rating));
+      });
+
+      if (state.rating > 0) {
+        ratingStatus.textContent = RATING_LABELS[state.rating];
+        ratingStatus.classList.remove("is-empty");
+      } else {
+        ratingStatus.textContent = "Tap a star to select your rating";
+        ratingStatus.classList.add("is-empty");
+      }
+    }
+
+    function updateKeywordCountBadge() {
+      const count = state.selectedKeywords.size;
+      if (state.rating === 0) {
+        selectedCountBadge.style.display = "none";
+        return;
+      }
+      selectedCountBadge.style.display = "inline-block";
+      selectedCountBadge.textContent = `${count} selected`;
+    }
+
+    function renderKeywordsForRating(rating) {
+      keywordsGrid.innerHTML = "";
+      state.selectedKeywords.clear();
+
+      if (!rating || !KEYWORDS_BY_RATING[rating]) {
+        keywordsLockNotice.style.display = "block";
+        keywordsContainer.classList.remove("is-visible");
+        updateKeywordCountBadge();
+        return;
+      }
+
+      keywordsLockNotice.style.display = "none";
+      keywordsContainer.classList.add("is-visible");
+
+      KEYWORDS_BY_RATING[rating].forEach(keyword => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "keyword-btn";
+        btn.textContent = keyword;
+        btn.setAttribute("aria-pressed", "false");
+
+        btn.addEventListener("click", () => {
+          if (state.selectedKeywords.has(keyword)) {
+            state.selectedKeywords.delete(keyword);
+            btn.classList.remove("is-active");
+            btn.setAttribute("aria-pressed", "false");
+          } else {
+            state.selectedKeywords.add(keyword);
+            btn.classList.add("is-active");
+            btn.setAttribute("aria-pressed", "true");
+          }
+          updateKeywordCountBadge();
+          hideAlert(formAlert);
+        });
+
+        keywordsGrid.appendChild(btn);
+      });
+
+      updateKeywordCountBadge();
+    }
+
+    starButtons.forEach(btn => {
+      const val = Number(btn.dataset.star);
+
+      btn.addEventListener("mouseenter", () => updateStarVisuals(val));
+      btn.addEventListener("mouseleave", () => updateStarVisuals(0));
+      btn.addEventListener("click", () => {
+        const changed = state.rating !== val;
+        state.rating = val;
+        updateStarVisuals(0);
+        hideAlert(formAlert);
+        if (changed) {
+          renderKeywordsForRating(val);
+        }
+      });
+    });
+
+    function updateCharCount() {
+      const len = reviewOutput.value.length;
+      charCountLabel.textContent = `${len} character${len === 1 ? "" : "s"}`;
+    }
+
+    reviewOutput.addEventListener("input", () => {
+      updateCharCount();
+      hideAlert(copySuccessAlert);
+      hideAlert(previewAlert);
+    });
+
+    async function handleGenerateReview(isRegenerate = false) {
+      if (state.isGenerating) return;
+
+      hideAlert(formAlert);
+      hideAlert(copySuccessAlert);
+      hideAlert(previewAlert);
+
+      if (state.rating === 0) {
+        showAlert(formAlert, "Please select a star rating above before generating your review.");
+        document.getElementById("ratingSection").scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      state.isGenerating = true;
+      generateBtn.disabled = true;
+      regenerateBtn.disabled = true;
+      loaderRow.classList.add("is-visible");
+
+      try {
+        await new Promise(resolve => setTimeout(resolve, 420));
+
+        const keywords = Array.from(state.selectedKeywords);
+        const orderText = orderInput.value;
+        const notesText = notesInput.value;
+        const previousDraft = isRegenerate ? reviewOutput.value : "";
+
+        let generatedText = "";
+
+        if (USE_BACKEND_AI && AI_ENDPOINT) {
+          const response = await fetch(AI_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              rating: state.rating,
+              keywords,
+              order: orderText,
+              notes: notesText
+            })
+          });
+          if (!response.ok) throw new Error("AI endpoint unavailable");
+          const data = await response.json();
+          generatedText = data.review || generateUniqueReview(state.rating, keywords, orderText, notesText, previousDraft);
+        } else {
+          generatedText = generateUniqueReview(state.rating, keywords, orderText, notesText, previousDraft);
+        }
+
+        previewStars.textContent = "★".repeat(state.rating) + "☆".repeat(5 - state.rating);
+        previewStars.setAttribute("aria-label", `${state.rating} out of 5 stars`);
+        reviewOutput.value = generatedText;
+        updateCharCount();
+
+        if (!previewCard.classList.contains("is-visible")) {
+          previewCard.classList.add("is-visible");
+        }
+
+        copyBtn.textContent = "📋 COPY MY REVIEW";
+        previewCard.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      } catch (err) {
+        showAlert(formAlert, "Something went wrong while creating your draft. Please try again.");
+      } finally {
+        state.isGenerating = false;
+        generateBtn.disabled = false;
+        regenerateBtn.disabled = false;
+        loaderRow.classList.remove("is-visible");
+      }
+    }
+
+    generateBtn.addEventListener("click", () => handleGenerateReview(false));
+    regenerateBtn.addEventListener("click", () => handleGenerateReview(true));
+
+    /* Copy Review with Clipboard API + Fallback */
+    async function copyReviewText() {
+      hideAlert(previewAlert);
+      const text = reviewOutput.value.trim();
+
+      if (!text) {
+        showAlert(previewAlert, "There is no review text to copy yet.");
+        return;
+      }
+
+      let copied = false;
+
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          copied = true;
+        } catch (err) {
+          copied = false;
+        }
+      }
+
+      if (!copied) {
+        try {
+          const tempArea = document.createElement("textarea");
+          tempArea.value = text;
+          tempArea.setAttribute("readonly", "");
+          tempArea.style.position = "fixed";
+          tempArea.style.top = "-9999px";
+          document.body.appendChild(tempArea);
+          tempArea.select();
+          tempArea.setSelectionRange(0, tempArea.value.length);
+          copied = document.execCommand("copy");
+          document.body.removeChild(tempArea);
+        } catch (err) {
+          copied = false;
+        }
+      }
+
+      if (copied) {
+        copyBtn.textContent = "COPIED SUCCESSFULLY ✓";
+        showAlert(copySuccessAlert, "Your review has been copied! Now paste it into Google Reviews.");
+        setTimeout(() => {
+          copyBtn.textContent = "📋 COPY MY REVIEW";
+        }, 2800);
+      } else {
+        showAlert(previewAlert, "Automatic copy was blocked by your browser. Please select the text above and copy it manually.");
+      }
+    }
+
+    copyBtn.addEventListener("click", copyReviewText);
+
+    /* Reset Form */
+    function resetAll() {
+      state.rating = 0;
+      state.selectedKeywords.clear();
+      updateStarVisuals(0);
+      renderKeywordsForRating(0);
+      orderInput.value = "";
+      notesInput.value = "";
+      reviewOutput.value = "";
+      updateCharCount();
+      previewCard.classList.remove("is-visible");
+      hideAlert(formAlert);
+      hideAlert(copySuccessAlert);
+      hideAlert(previewAlert);
+      copyBtn.textContent = "📋 COPY MY REVIEW";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    resetBtn.addEventListener("click", resetAll);
+    resetBottomBtn.addEventListener("click", resetAll);
+  </script>
+</body>
+</html>
